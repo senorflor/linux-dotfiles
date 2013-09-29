@@ -17,3 +17,9 @@ set show-all-if-ambiguous on
 # through commands (i.e. more intelligent Up/Down-arrow behavior)
 "\e[B": history-search-forward
 "\e[A": history-search-backward
+
+# Stop old-school ascii/8th-bit cruft from interfering with Unicode entry
+set meta-flag on
+set input-meta on
+set output-meta on
+set convert-meta off

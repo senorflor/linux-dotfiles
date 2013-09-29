@@ -1,5 +1,7 @@
 # OS or Editor files
 ._*
+\#*
+.\#*
 .DS_Store
 Thumbs.db
 
