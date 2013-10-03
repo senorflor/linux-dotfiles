@@ -119,14 +119,21 @@ mirrorfiles() {
         rm -rf "${HOME}/.vim"
     fi
 
+    # Create the .emacs.d directory if it's not already there.
+    if [ ! -d "${HOME}/.emacs.d" ]; then
+        mkdir "${HOME}/.emacs.d"
+    fi
+
     # Create the necessary symbolic links between the `.dotfiles` and `HOME`
     # directory. The `bash_profile` sources other files directly from the
     # `.dotfiles` repository.
     link "bash/bashrc"        ".bashrc"
     link "bash/bash_profile"  ".bash_profile"
     link "bash/inputrc"       ".inputrc"
+    link "emacs/init.el"      ".emacs.d/init.el"
     link "git/gitattributes"  ".gitattributes"
     link "git/gitignore"      ".gitignore"
+    link "tmux/tmux.conf"     ".tmux.conf"
     link "vim"                ".vim"
     link "vim/gvimrc"         ".gvimrc"
     link "vim/vimrc"          ".vimrc"

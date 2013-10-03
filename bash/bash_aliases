@@ -13,8 +13,8 @@ alias -- -="cd -"
 
 # List dir contents aliases
 # ref: http://ss64.com/osx/ls.html
-# Long form no user group, color
-alias l="ls -oG"
+# Short form, colored and type indicated by color
+alias l="ls -FG"
 # Order by last modified, long form no user group, color
 alias lt="ls -toG"
 # List all except . and ..., color, mark file types, long form no user group, file size
