@@ -3,17 +3,16 @@
 run_help() {
 
 cat <<EOT
-OS X dotfiles - Patrick Flor, via @necolas - http://nicolasgallagher.com/
+Linux dotfiles - Patrick Flor, via @necolas - http://nicolasgallagher.com/
 
 Usage: $(basename "$0") [options]
 
 Options:
     -h, --help      Print this help text
     -l, --list      Print a list of additional software to install
-    --no-packages   Suppress package updates
     --no-sync       Suppress pulling from the remote repository
 
-Documentation can be found at https://github.com/senorflor/dotfiles/
+Documentation can be found at https://github.com/senorflor/linux-dotfiles/
 
 Copyright (c) Nicolas Gallagher
 Licensed under the MIT license.

@@ -1,21 +1,18 @@
 # Dotfiles (Patrick Flor)
 
-My OS X dotfiles.
+My minimal Linux dotfiles.
 
 
 ## How to install
 
-The installation step requires the [XCode Command Line
-Tools](https://developer.apple.com/downloads) and may overwrite existing
-dotfiles in your HOME and `.vim` directories.
-
 ```bash
-$ bash -c "$(curl -fsSL raw.github.com/senorflor/dotfiles/master/bin/dotfiles)"
+$ bash -c "$(curl -fsSL raw.github.com/senorflor/linux-dotfiles/master/bin/dotfiles)"
 ```
 
 N.B. If you wish to fork this project and maintain your own dotfiles, you must
 substitute my username for your own in the above command and the 2 variables
 found at the top of the `bin/dotfiles` script.
+
 
 ## How to update
 
@@ -24,7 +21,6 @@ You should run the update when:
 * You make a change to `~/.dotfiles/git/gitconfig` (the only file that is
   copied rather than symlinked).
 * You want to pull changes from the remote repository.
-* You want to update Homebrew formulae and Node packages.
 
 Run the dotfiles command:
 
@@ -39,93 +35,10 @@ Options:
         <td><code>-h</code>, <code>--help</code></td>
         <td>Help</td>
     </tr>
-    <tr>
-        <td><code>-l</code>, <code>--list</code></td>
-        <td>List of additional applications to install</td>
-    </tr>
-    <tr>
-        <td><code>--no-packages</code></td>
-        <td>Suppress package updates</td>
-    </tr>
-    <tr>
-        <td><code>--no-sync</code></td>
-        <td>Suppress pulling from the remote repository</td>
-    </tr>
 </table>
 
 
 ## Features
-
-### Automatic software installation
-
-Homebrew formulae:
-
-* GNU core utilities
-* [git](http://git-scm.com/)
-* [ack](http://betterthangrep.com/)
-* [bash-completion](http://bash-completion.alioth.debian.org/)
-* jpeg
-* [macvim](http://code.google.com/p/macvim/)
-* [node](http://nodejs.org/)
-* [optipng](http://optipng.sourceforge.net/)
-* [phantomjs](http://phantomjs.org/)
-* [tree](http://mama.indstate.edu/users/ice/tree/)
-* [wget](http://www.gnu.org/software/wget/)
-
-Node packages:
-
-* [bower](http://bower.io/)
-* [grunt-cli](http://gruntjs.com/)
-* [jshint](http://www.jshint.com/)
-* [karma](http://karma-runner.github.io/)
-* [yo](http://yeoman.io/)
-
-Vim plugins:
-
-* [ctrlp.vim](https://github.com/kien/ctrlp.vim)
-* [html5.vim](https://github.com/othree/html5.vim)
-* [mustache.vim](https://github.com/juvenn/mustache.vim)
-* [syntastic](https://github.com/scrooloose/syntastic)
-* [vim-colors-solarized](https://github.com/altercation/vim-colors-solarized)
-* [vim-git](https://github.com/tpope/vim-git)
-* [vim-haml](https://github.com/tpope/vim-haml)
-* [vim-javascript](https://github.com/pangloss/vim-javascript)
-* [vim-less](https://github.com/groenewege/vim-less)
-* [vim-markdown](https://github.com/tpope/vim-markdown)
-* [vim-pathogen](https://github.com/tpope/vim-pathogen)
-
-N.B. If your pre-existing Homebrew installation is not in `/usr/local` then you
-must prepend your custom installation's `bin` to the PATH in
-`.bash_profile.local`:
-
-```bash
-# Add `brew` command's custom location to PATH
-PATH="/opt/acme/bin:$PATH"
-```
-
-### Custom OS X defaults
-
-Custom OS X settings can be applied during the `dotfiles` process. They can
-also be applied independently by running the following command:
-
-```bash
-$ osxdefaults
-```
-
-### Bootable backup-drive script
-
-These dotfiles include a script that will incrementally back up your data to an
-external, bootable clone of your computer's internal drive. First, make sure
-that the value of `DST` in the `bin/backup` script matches the name of your
-backup-drive. Then run the following command:
-
-```bash
-$ backup
-```
-
-For more information on how to setup your backup-drive, please read the
-preparatory steps in this post on creating a [Mac OS X bootable backup
-drive](http://nicolasgallagher.com/mac-osx-bootable-backup-drive-with-rsync/).
 
 ### Custom bash prompt
 
@@ -192,63 +105,16 @@ GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 # Set the credentials (modifies ~/.gitconfig)
 git config --global user.name "$GIT_AUTHOR_NAME"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
-
-# Export PhantomJS bin location for custom Homebrew directory
-export PHANTOMJS_BIN="$(brew --prefix)/bin/phantomjs"
 ```
 
 The `git/gitconfig` file is copied to `~/.gitconfig`, so any private git
 configuration specified in `~/.bash_profile.local` will not be committed to
 your dotfiles repository.
 
-
-## Adding new git submodules
-
-If you want to add more git submodules, e.g., Vim plugins to be managed by
-pathogen, then follow these steps while in the root of the superproject.
-
-```bash
-# Add the new submodule
-git submodule add https://example.com/remote/path/to/repo.git vim/bundle/one-submodule
-# Initialize and clone the submodule
-git submodule update --init
-# Stage the changes
-git add vim/bundle/one-submodule
-# Commit the changes
-git commit -m "Add a new submodule: one-submodule"
-```
-
-
-## Updating git submodules
-
-Updating individual submodules within the superproject:
-
-```bash
-# Change to the submodule directory
-cd vim/bundle/one-submodule
-# Checkout the desired branch (of the submodule)
-git checkout master
-# Pull from the tip of master (of the submodule - could be any sha or pointer)
-git pull origin master
-# Go back to main dotfiles repo root
-cd ../../..
-# Stage the submodule changes
-git add vim/bundle/one-submodule
-# Commit the submodule changes
-git commit -m "Update submodule 'one-submodule' to the latest version"
-# Push to a remote repository
-git push origin master
-```
-
-Now, if anyone updates their local repository from the remote repository, then
-using `git submodule update` will update the submodules (that have been
-initialized) in their local repository. N.B This will wipe away any local
-changes made to those submodules.
-
-
 ## Acknowledgements
 
-Inspiration and code was taken from many sources, including:
+Inspiration and code for @necolas's dotfiles, which I have neutered in
+order to make this repo, was taken from many sources, including:
 
 * [@mathiasbynens](https://github.com/mathiasbynens) (Mathias Bynens)
   [https://github.com/mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)

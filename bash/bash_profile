@@ -10,7 +10,7 @@ declare -a files=(
     $HOME/.dotfiles/bash/functions/* # Functions
     $HOME/.dotfiles/bash/bash_prompt # Custom bash prompt
     $HOME/.bash_profile.local # Local and private settings not under version control (e.g. git credentials)
-    $HOME/.dotfiles/bash/bash_paths # Path modifications (must source after `.bash_profile.local` in case of custom `brew` location)
+    $HOME/.dotfiles/bash/bash_paths # Path modifications
 )
 
 # If these files are readable, source them
@@ -22,11 +22,3 @@ do
 done
 
 unset files
-
-# Only use `brew` after it has been added to the PATH
-bash_completion_path="$(brew --prefix)/etc/bash_completion"
-
-# Source Bash completion (installed via Homebrew)
-if [[ -r $bash_completion_path ]]; then
-    source $bash_completion_path
-fi

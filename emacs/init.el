@@ -1,3 +1,9 @@
+(defvar pre-24 (< emacs-major-version 24))
+
+;;; Set up 'package for emacs 23
+(when pre-24
+  (load "~/.emacs.d/package.el"))
+
 ;;; Slather with elisp
 (require 'package)
 (add-to-list 'package-archives
@@ -9,44 +15,80 @@
 (when (not package-archive-contents)
     (package-refresh-contents))
 
-(defvar my-packages '(starter-kit
-                      starter-kit-bindings
-                      starter-kit-lisp
-                      starter-kit-js
-                      starter-kit-ruby
+(defvar my-packages
+  '(;; General
+    auto-complete
+    color-theme-solarized
+    powerline
+    rainbow-delimiters
+    undo-tree
+    yasnippet
 
-                   ;; General
-                      auto-complete
-                      color-theme-solarized
-                      powerline
-                      rainbow-delimiters
-                      undo-tree
-                      yasnippet
+    ;; Clojure
+    ac-nrepl
+    clojure-mode
+    clojure-test-mode
+    clojurescript-mode
+    nrepl
 
-                   ;; Clojure
-                      ac-nrepl
-                      clojure-mode
-                      clojure-test-mode
-                      clojurescript-mode
-                      nrepl
+    ;; Go
+    go-mode
 
-                   ;; Go
-                      go-mode
+    ;; Haskell
+    haskell-mode
 
-                   ;; Haskell
-                      haskell-mode
+    ;; Markdown
+    markdown-mode
 
-                   ;; Markdown
-                      markdown-mode
-
-                   ;; Project nav
-                      ack-and-a-half
-                      projectile)
+    ;; Project nav
+    ack-and-a-half
+    projectile)
   "Packages required at launchtime")
+
+(defvar my-24-packages
+  '(;; Starter kits
+    ;; TODO: see what's actually in these :)
+    starter-kit
+    starter-kit-bindings
+    starter-kit-lisp
+    starter-kit-js
+    starter-kit-ruby)
+  "Possibly Emacs 24-specific stuff")
+
+(if (not pre-24)
+    (setq my-packages (append my-24-packages my-packages)))
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+;;; color-theme/solarized
+
+(if pre-24
+    ;; use color-theme solarized
+    (progn
+      (load "~/.emacs.d/color-theme.el")
+      (require 'color-theme)
+      (color-theme-initialize)
+      (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
+      (require 'color-theme-solarized)
+      (color-theme-solarized-dark))
+  ;; it's emacs24, so use built-in theme
+  (progn
+    (require 'solarized-dark-theme)
+    (load-theme 'solarized-dark t)))
+
+(defun endarken () (interactive)
+  (if pre-24
+      (color-theme-solarized-dark)
+    (load-theme 'solarized-dark t)))
+(global-set-key (kbd "C-c s") 'endarken)
+
+(defun enlighten () (interactive)
+  (if pre-24
+      (color-theme-solarized-light)
+    (load-theme 'solarized-light t)))
+(global-set-key (kbd "C-c C-M-s") 'enlighten)
 
 ;;; undo-tree
 (require 'undo-tree)
@@ -95,11 +137,7 @@
 (ac-config-default)
 
 ;;; solarized
-(load-theme 'solarized-dark t)
-(defun endarken () (interactive) (load-theme 'solarized-dark t))
-(defun enlighten () (interactive) (load-theme 'solarized-light t))
-(global-set-key (kbd "C-c s") 'endarken)
-(global-set-key (kbd "C-c C-M-s") 'enlighten)
+
 
 ;;; haskell
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)

@@ -1,28 +1,22 @@
 #!/bin/bash
 
 DOTFILES_DIRECTORY="${HOME}/.dotfiles"
-DOTFILES_TARBALL_PATH="https://github.com/senorflor/dotfiles/tarball/master"
-DOTFILES_GIT_REMOTE="https://github.com/senorflor/dotfiles"
+DOTFILES_TARBALL_PATH="https://github.com/senorflor/linux-dotfiles/tarball/master"
 
-# If missing, download and extract the dotfiles repository
-if [[ ! -d ${DOTFILES_DIRECTORY} ]]; then
-    printf "$(tput setaf 7)Downloading dotfiles...\033[m\n"
-    mkdir ${DOTFILES_DIRECTORY}
-    # Get the tarball
-    curl -fsSLo ${HOME}/dotfiles.tar.gz ${DOTFILES_TARBALL_PATH}
-    # Extract to the dotfiles directory
-    tar -zxf ${HOME}/dotfiles.tar.gz --strip-components 1 -C ${DOTFILES_DIRECTORY}
-    # Remove the tarball
-    rm -rf ${HOME}/dotfiles.tar.gz
-fi
+printf "$(tput setaf 7)Downloading dotfiles...\033[m\n"
+rm -rf ${DOTFILES_DIRECTORY}
+mkdir ${DOTFILES_DIRECTORY}
+# Get the tarball
+curl -fskSLo ${HOME}/dotfiles.tar.gz ${DOTFILES_TARBALL_PATH}
+# Extract to the dotfiles directory
+tar -zxf ${HOME}/dotfiles.tar.gz --strip-components 1 -C ${DOTFILES_DIRECTORY}
+# Remove the tarball
+rm -rf ${HOME}/dotfiles.tar.gz
 
 cd ${DOTFILES_DIRECTORY}
 
 source ./lib/help
-source ./lib/list
 source ./lib/utils
-source ./lib/brew
-source ./lib/npm
 
 # Help text
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
@@ -30,81 +24,8 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     exit
 fi
 
-# List additional software to install
-if [[ "$1" == "-l" || "$1" == "--list" ]]; then
-    run_list
-    exit
-fi
-
-# Test for known flags
-for opt in $@
-do
-    case $opt in
-        --no-packages) no_packages=true ;;
-        --no-sync) no_sync=true ;;
-        -*|--*) e_warning "Warning: invalid option $opt" ;;
-    esac
-done
-
-# Before relying on Homebrew, check that packages can be compiled
-if ! type_exists 'gcc'; then
-    e_error "The XCode Command Line Tools must be installed first."
-    printf "  Download them from: https://developer.apple.com/downloads\n"
-    printf "  Then run: bash ~/.dotfiles/bin/dotfiles\n"
-    exit 1
-fi
-
-# Check for Homebrew
-if ! type_exists 'brew'; then
-    e_header "Installing Homebrew..."
-    ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
-fi
-
-# Check for git
-if ! type_exists 'git'; then
-    e_header "Updating Homebrew..."
-    brew update
-    e_header "Installing Git..."
-    brew install git
-fi
-
-# Initialize the git repository if it's missing
-if ! is_git_repo; then
-    e_header "Initializing git repository..."
-    git init
-    git remote add origin ${DOTFILES_GIT_REMOTE}
-    git fetch origin master
-    # Reset the index and working tree to the fetched HEAD
-    # (submodules are cloned in the subsequent sync step)
-    git reset --hard FETCH_HEAD
-    # Remove any untracked files
-    git clean -fd
-fi
-
-# Conditionally sync with the remote repository
-if [[ $no_sync ]]; then
-    printf "Skipped dotfiles sync.\n"
-else
-    e_header "Syncing dotfiles..."
-    # Pull down the latest changes
-    git pull --rebase origin master
-    # Update submodules
-    git submodule update --recursive --init --quiet
-fi
-
-# Install and update packages
-if [[ $no_packages ]]; then
-    printf "Skipped package installations.\n"
-else
-    printf "Updating packages...\n"
-    # Install Homebrew formulae
-    run_brew
-    # Install Node packages
-    run_npm
-fi
-
 link() {
-    # Force create/replace the symlink.
+    # Force create/replace a symlink.
     ln -fs "${DOTFILES_DIRECTORY}/${1}" "${HOME}/${2}"
 }
 
@@ -127,16 +48,19 @@ mirrorfiles() {
     # Create the necessary symbolic links between the `.dotfiles` and `HOME`
     # directory. The `bash_profile` sources other files directly from the
     # `.dotfiles` repository.
-    link "bash/bashrc"        ".bashrc"
-    link "bash/bash_profile"  ".bash_profile"
-    link "bash/inputrc"       ".inputrc"
-    link "emacs/init.el"      ".emacs.d/init.el"
-    link "git/gitattributes"  ".gitattributes"
-    link "git/gitignore"      ".gitignore"
-    link "tmux/tmux.conf"     ".tmux.conf"
-    link "vim"                ".vim"
-    link "vim/gvimrc"         ".gvimrc"
-    link "vim/vimrc"          ".vimrc"
+    link "bash/bashrc"                       ".bashrc"
+    link "bash/bash_profile"                 ".bash_profile"
+    link "bash/inputrc"                      ".inputrc"
+    link "emacs/init.el"                     ".emacs.d/init.el"
+    link "emacs/package.el"                  ".emacs.d/package.el"
+    link "emacs/color-theme.el"              ".emacs.d/color-theme.el"
+    link "emacs/emacs-color-theme-solarized" ".emacs.d/emacs-color-theme-solarized"
+    link "git/gitattributes"                 ".gitattributes"
+    link "git/gitignore"                     ".gitignore"
+    link "tmux/tmux.conf"                    ".tmux.conf"
+    link "vim"                               ".vim"
+    link "vim/gvimrc"                        ".gvimrc"
+    link "vim/vimrc"                         ".vimrc"
 
     e_success "Dotfiles update complete!"
 }
@@ -150,14 +74,4 @@ if is_confirmed; then
 else
     printf "Aborting...\n"
     exit 1
-fi
-
-# Ask before potentially overwriting OS X defaults
-seek_confirmation "Warning: This step may modify your OS X system defaults."
-
-if is_confirmed; then
-    bash ./bin/osxdefaults
-    e_success "OS X settings updated! You may need to restart."
-else
-    printf "Skipped OS X settings update.\n"
 fi
