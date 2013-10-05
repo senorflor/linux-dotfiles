@@ -1,23 +1,31 @@
 #!/bin/bash
 
+
+maybe_tput() {
+    [ -z $PS1 ] || tput setaf $1
+    echo "${*:2}"
+    [ -z $PS1 ] || tput sgr0
+}
+
 # Header logging
 e_header() {
-    printf "\n$(tput setaf 7)%s$(tput sgr0)\n" "$@"
+    echo
+    maybe_tput 7   "$@"
 }
 
 # Success logging
 e_success() {
-    printf "$(tput setaf 64)✓ %s$(tput sgr0)\n" "$@"
+    maybe_tput 64  "✓" "$@"
 }
 
 # Error logging
 e_error() {
-    printf "$(tput setaf 1)x %s$(tput sgr0)\n" "$@"
+    maybe_tput 1   "x" "$@"
 }
 
 # Warning logging
 e_warning() {
-    printf "$(tput setaf 136)! %s$(tput sgr0)\n" "$@"
+    maybe_tput 136 "!" "$@"
 }
 
 # Ask for confirmation before proceeding
