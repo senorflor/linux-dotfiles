@@ -22,6 +22,10 @@ e_warning() {
 
 # Ask for confirmation before proceeding
 seek_confirmation() {
+    if [ -z $PS1 ]; then
+        REPLY="y"
+        return
+    fi
     printf "\n"
     e_warning "$@"
     read -p "Continue? (y/n) " -n 1
