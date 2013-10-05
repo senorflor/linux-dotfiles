@@ -1,12 +1,5 @@
 #!/bin/bash
 
-
-maybe_tput() {
-    [ -z $PS1 ] || tput setaf $1
-    echo "${*:2}"
-    [ -z $PS1 ] || tput sgr0
-}
-
 # Header logging
 e_header() {
     echo

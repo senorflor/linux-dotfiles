@@ -3,7 +3,13 @@
 DOTFILES_DIRECTORY="${HOME}/.dotfiles"
 DOTFILES_TARBALL_PATH="https://github.com/senorflor/linux-dotfiles/tarball/master"
 
-printf "$(tput setaf 7)Downloading dotfiles...\033[m\n"
+maybe_tput() {
+    [ -z $PS1 ] || tput setaf $1
+    echo "${*:2}"
+    [ -z $PS1 ] || tput sgr0
+}
+
+maybe_tput 7 "Downloading dotfiles..."
 rm -rf ${DOTFILES_DIRECTORY}
 mkdir ${DOTFILES_DIRECTORY}
 # Get the tarball
