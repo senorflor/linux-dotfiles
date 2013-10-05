@@ -11,7 +11,13 @@ $ bash -c "$(curl -fsSL raw.github.com/senorflor/linux-dotfiles/master/bin/dotfi
 
 N.B. If you wish to fork this project and maintain your own dotfiles, you must
 substitute my username for your own in the above command and the 2 variables
-found at the top of the `bin/dotfiles` script.
+found at the top of the `bin/dotfiles` script. If there are
+permissions problems with the dotfiles linking, try the same command,
+replacing "master" with "sudo-ln":
+
+```bash
+$ bash -c "$(curl -fsSL raw.github.com/senorflor/linux-dotfiles/sudo-ln/bin/dotfiles)"
+```
 
 
 ## How to update
