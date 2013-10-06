@@ -15,13 +15,13 @@ alias -- -="cd -"
 # List dir contents aliases
 # ref: http://ss64.com/osx/ls.html
 # Short form, colored and type indicated by color
-alias l="ls -FG"
+alias l="ls --color -F"
 # Order by last modified, long form no user group, color
-alias lt="ls -toG"
+alias lt="ls --color -to"
 # List all except . and ..., color, mark file types, long form no user group, file size
-alias la="ls -AGFoh"
-# List all except . and ..., color, mark file types, long form no use group, order by last modified, file size
-alias lat="ls -AGFoth"
+alias la="ls --color -AFoh"
+# List all except . and .., color, mark file types, long form no use group, order by last modified, file size
+alias lat="ls --color -AFoth"
 
 # Concatenate and print content of files (add line numbers)
 alias catn="cat -n"
