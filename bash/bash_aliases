@@ -23,6 +23,20 @@ alias la="ls --color -AFoh"
 # List all except . and .., color, mark file types, long form no use group, order by last modified, file size
 alias lat="ls --color -AFoth"
 
+#
+# These are the nice Git aliases I got from Bob Beaty
+#
+alias gad='git add .'
+alias ga='git add'
+alias gb='git branch'
+alias gco='git co'
+alias gcp='git cherry-pick'
+alias gd='git diff'
+alias gf='git fetch'
+alias gp='git push'
+alias gst='git status'
+alias gsh='git show HEAD'
+
 # Concatenate and print content of files (add line numbers)
 alias catn="cat -n"
 
