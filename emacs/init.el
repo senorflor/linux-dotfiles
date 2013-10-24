@@ -19,7 +19,6 @@
   '(;; General
     auto-complete
     color-theme-solarized
-    powerline
     rainbow-delimiters
     undo-tree
     yasnippet
@@ -52,7 +51,8 @@
     starter-kit-bindings
     starter-kit-lisp
     starter-kit-js
-    starter-kit-ruby)
+    starter-kit-ruby
+    powerline)
   "Possibly Emacs 24-specific stuff")
 
 (if (not pre-24)
@@ -62,19 +62,22 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-;;; color-theme/solarized
+;;; pre-24 or 24-specific items
 
 (if pre-24
-    ;; use color-theme solarized
+
     (progn
+      ;; load color-theme and use the old-style theme api
       (load "~/.emacs.d/color-theme.el")
       (require 'color-theme)
       (color-theme-initialize)
       (add-to-list 'load-path "~/.emacs.d/emacs-color-theme-solarized")
       (require 'color-theme-solarized)
       (color-theme-solarized-dark))
-  ;; it's emacs24, so use built-in theme
   (progn
+    ;;; powerline
+    (require 'powerline)
+    ;;; solarized
     (require 'solarized-dark-theme)
     (load-theme 'solarized-dark t)))
 
@@ -102,8 +105,6 @@
 (require 'ido)
 (ido-mode t)
 
-;;; powerline
-(require 'powerline)
 
 ;;; Snippets
 (require 'yasnippet)
