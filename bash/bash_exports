@@ -5,7 +5,6 @@
 # Make vim the default editor
 export EDITOR="emacs"
 
-# Ignore duplicate commands in the history
 # (I want to do analysis over most used commands, so leaving dups in)
 # export HISTCONTROL=ignoredups
 
@@ -18,8 +17,12 @@ export HISTFILESIZE=10000000
 export HISTSIZE=10000
 
 # Make some commands not show up in history
+<<<<<<< HEAD
 # (I want to do analysis over most used commands, so leaving these in)
 # export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
+=======
+# export HISTIGNORE="ls:[ \t]*:cd:cd -:pwd;exit:date:* --help"
+>>>>>>> 03210dd... Teh tweakz
 
 # Don't clear the screen after quitting a manual page
 export MANPAGER="less -X"

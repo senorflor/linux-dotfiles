@@ -172,3 +172,4 @@
 ;;; Projectile everywhere
 (require 'projectile)
 (projectile-global-mode)
+(put 'downcase-region 'disabled nil)
